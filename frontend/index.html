@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comunicação em Redes</title>
+
+    <link rel="stylesheet" href="styles/index.css" />
+
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="h-screen bg-neutral-200 flex justify-center items-center">
+    <section
+      id="login-section"
+      class="bg-white flex w-full px-6 sm:px-0 sm:w-md flex-col justify-center py-6"
+    >
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          class="mx-auto h-10 w-auto"
+          src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=green&shade=600"
+          alt="Ícone da empresa."
+        />
+        <h2
+          class="mt-2 text-center text-2xl/9 font-bold tracking-tight text-gray-900"
+        >
+          Entrar em sua conta
+        </h2>
+      </div>
+
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form
+          id="login-form"
+          name="login-form"
+          class="space-y-6"
+          onsubmit="onLogin(event)"
+        >
+          <div>
+            <label
+              for="username-input"
+              class="block text-sm/6 font-medium text-gray-900"
+              >Nome de usuário</label
+            >
+            <div class="mt-2">
+              <input
+                id="username-input"
+                type="text"
+                autocomplete="username"
+                required
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <label
+                for="password-input"
+                class="block text-sm/6 font-medium text-gray-900"
+                >Senha</label
+              >
+              <div class="text-sm">
+                <a
+                  href="#"
+                  class="font-semibold text-neutral-800 hover:text-neutral-500"
+                  >Esqueceu a senha?</a
+                >
+              </div>
+            </div>
+            <div class="mt-2">
+              <input
+                type="password"
+                name="password-input"
+                id="password-input"
+                autocomplete="current-password"
+                required
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              aria-label="Entrar"
+              class="flex hover:cursor-pointer w-full justify-center rounded-md bg-neutral-800 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs active:bg-neutral-600 hover:scale-101 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Entrar
+            </button>
+          </div>
+        </form>
+
+        <p class="mt-10 text-center text-sm/6 text-gray-500">
+          Não tem uma conta?
+          <a
+            href="#"
+            class="font-semibold text-neutral-800 hover:text-neutral-500"
+            >Criar conta</a
+          >
+        </p>
+      </div>
+    </section>
+    <!-- <a
+      href="/pages/chat.html"
+      class="absolute bottom-20 text-green-600 font-semibold text-lg"
+      >Ir para a proxíma pagina</a
+    > -->
+    <section id="chat-section" class="hidden w-screen">
+      <aside id="sidebar" class="hidden md:flex absolute md:static z-1 md:z-0">
+        <div
+          class="pb-6 pt-15 bg-neutral-400 max-w-20 text-white flex flex-col justify-between items-center"
+        >
+          <div class="flex flex-col items-center">
+            <img
+              class="rounded-full w-12"
+              src="/assets/images/cartoon-character.png"
+              alt="Imagem de perfil"
+            />
+            <span class="text-center px-1">Meu usuário</span>
+          </div>
+
+          <div>
+            <div class="hover:cursor-pointer">
+              <a href="">
+                <img
+                  class="w-10"
+                  src="/assets/icons/gear-icon.svg"
+                  alt="Ícone de uma engrenagem"
+                />
+              </a>
+            </div>
+            <div class="hover:cursor-pointer mt-4">
+              <a href="/index.html">
+                <img
+                  class="w-10"
+                  src="/assets/icons/door-open-icon.svg"
+                  alt="Ícone de uma porta aberta"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col bg-neutral-600 max-w-xs h-screen py-6">
+          <h2 class="text-center text-white text-lg font-medium">Usuários</h2>
+
+          <ul
+            role="list"
+            class="divide-y divide-gray-100 flex-1 overflow-y-auto px-1.5"
+          >
+            <li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
+              <div class="flex min-w-0 gap-x-4">
+                <img
+                  class="size-12 flex-none rounded-full bg-gray-50"
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <div class="min-w-0 flex-auto">
+                  <p class="text-xs font-semibold text-white">
+                    Leslie Alexander
+                  </p>
+                  <p class="mt-1 truncate text-xs/5 text-neutral-300">
+                    leslie.alexander@example.com
+                  </p>
+                </div>
+              </div>
+              <div
+                class="shrink-0 mt-2 sm:mt-0 sm:flex sm:flex-col sm:items-end"
+              >
+                <p class="text-xs text-white">Co-Founder / CEO</p>
+                <p class="mt-1 text-xs/5 text-neutral-300">
+                  Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+                </p>
+              </div>
+            </li>
+            <li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
+              <div class="flex min-w-0 gap-x-4">
+                <img
+                  class="size-12 flex-none rounded-full bg-gray-50"
+                  src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <div class="min-w-0 flex-auto">
+                  <p class="text-xs font-semibold text-white">Michael Foster</p>
+                  <p class="mt-1 truncate text-xs/5 text-neutral-300">
+                    michael.foster@example.com
+                  </p>
+                </div>
+              </div>
+              <div
+                class="mt-2 sm:mt-0 shrink-0 sm:flex sm:flex-col sm:items-end"
+              >
+                <p class="text-xs text-white">Co-Founder / CTO</p>
+                <p class="mt-1 text-xs/5 text-neutral-300">
+                  Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+                </p>
+              </div>
+            </li>
+            <li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
+              <div class="flex min-w-0 gap-x-4">
+                <img
+                  class="size-12 flex-none rounded-full bg-gray-50"
+                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <div class="min-w-0 flex-auto">
+                  <p class="text-xs font-semibold text-white">Dries Vincent</p>
+                  <p class="mt-1 truncate text-xs/5 text-neutral-300">
+                    dries.vincent@example.com
+                  </p>
+                </div>
+              </div>
+              <div
+                class="mt-2 sm:mt-0 shrink-0 sm:flex sm:flex-col sm:items-end"
+              >
+                <p class="text-xs text-white">Business Relations</p>
+                <div class="mt-1 flex items-center gap-x-1.5">
+                  <div class="flex-none rounded-full bg-emerald-500/20 p-1">
+                    <div class="size-1.5 rounded-full bg-emerald-500"></div>
+                  </div>
+                  <p class="text-xs/5 text-neutral-300">Online</p>
+                </div>
+              </div>
+            </li>
+            <li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
+              <div class="flex min-w-0 gap-x-4">
+                <img
+                  class="size-12 flex-none rounded-full bg-gray-50"
+                  src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <div class="min-w-0 flex-auto">
+                  <p class="text-xs font-semibold text-white">Lindsay Walton</p>
+                  <p class="mt-1 truncate text-xs/5 text-neutral-300">
+                    lindsay.walton@example.com
+                  </p>
+                </div>
+              </div>
+              <div
+                class="mt-2 sm:mt-0 shrink-0 sm:flex sm:flex-col sm:items-end"
+              >
+                <p class="text-xs text-white">Front-end Developer</p>
+                <p class="mt-1 text-xs/5 text-neutral-300">
+                  Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+                </p>
+              </div>
+            </li>
+            <li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
+              <div class="flex min-w-0 gap-x-4">
+                <img
+                  class="size-12 flex-none rounded-full bg-gray-50"
+                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <div class="min-w-0 flex-auto">
+                  <p class="text-xs font-semibold text-white">Courtney Henry</p>
+                  <p class="mt-1 truncate text-xs/5 text-neutral-300">
+                    courtney.henry@example.com
+                  </p>
+                </div>
+              </div>
+              <div
+                class="mt-2 sm:mt-0 shrink-0 sm:flex sm:flex-col sm:items-end"
+              >
+                <p class="text-xs text-white">Designer</p>
+                <p class="mt-1 text-xs/5 text-neutral-300">
+                  Last seen <time datetime="2023-01-23T13:23Z">3h ago</time>
+                </p>
+              </div>
+            </li>
+            <li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
+              <div class="flex min-w-0 gap-x-4">
+                <img
+                  class="size-12 flex-none rounded-full bg-gray-50"
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <div class="min-w-0 flex-auto">
+                  <p class="text-xs font-semibold text-white">Tom Cook</p>
+                  <p class="mt-1 truncate text-xs/5 text-neutral-300">
+                    tom.cook@example.com
+                  </p>
+                </div>
+              </div>
+              <div
+                class="mt-2 sm:mt-0 shrink-0 sm:flex sm:flex-col sm:items-end"
+              >
+                <p class="text-xs text-white">Director of Product</p>
+                <div class="mt-1 flex items-center gap-x-1.5">
+                  <div class="flex-none rounded-full bg-emerald-500/20 p-1">
+                    <div class="size-1.5 rounded-full bg-emerald-500"></div>
+                  </div>
+                  <p class="text-xs/5 text-neutral-300">Online</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </aside>
+      <section class="w-full flex flex-col h-screen bg-neutral-500">
+        <div class="flex relative">
+          <button
+            onclick="toggleSidebar()"
+            class="md:hidden z-2 absolute left-4 top-1 hover:cursor-pointer bg-transparent"
+          >
+            <img
+              class="w-10 h-10"
+              src="/assets/icons/hamburguer-menu-icon.svg"
+              alt="Ícone de barras para abrir menu"
+            />
+          </button>
+          <h1 class="flex-1 text-center py-2 text-white font-bold text-2xl">
+            Sala de bate-papo
+          </h1>
+        </div>
+
+        <ul
+          id="chat-messages-box"
+          class="flex-1 overflow-y-auto flex flex-col bg-neutral-200 p-4 gap-2"
+        >
+          <li class="flex justify-start">
+            <div
+              class="border-2 border-black rounded-lg bg-white p-3 max-w-[70%]"
+            >
+              <span class="font-medium break-all text-blue-700 block"
+                >Leslie Alexander</span
+              >
+              <p class="break-all">Bom dia! Como vai você hoje?</p>
+            </div>
+          </li>
+          <li class="flex justify-end">
+            <div
+              class="border-2 border-black rounded-lg bg-blue-100 p-3 max-w-[70%]"
+            >
+              <span class="font-medium break-all text-blue-800 block"
+                >Meu usuário</span
+              >
+              <p class="break-all">Olá! Estou bem, obrigado. E você?</p>
+            </div>
+          </li>
+        </ul>
+        <div>
+          <form
+            onsubmit="onSendMessage(event)"
+            class="bg-neutral-500 p-4 flex justify-center items-center gap-2"
+          >
+            <div class="relative w-full max-w-xl">
+              <label class="absolute -top-5 text-white" for="message-input"
+                >Inserir texto</label
+              >
+              <input
+                class="bg-white w-full max-w-xl text-sm py-1 px-1"
+                type="text"
+                name="message-input"
+                id="message-input"
+                placeholder="Digite sua mensagem..."
+              />
+            </div>
+            <button
+              aria-label="Enviar"
+              type="submit"
+              class="flex hover:cursor-pointer w-9 h-9 rounded-full active:scale-101 justify-center items-center bg-white p-1.5"
+            >
+              <img
+                class="w-5"
+                src="/assets/icons/paper-plane-icon.svg"
+                alt="Ícone de um avião de papel"
+              />
+            </button>
+          </form>
+        </div>
+      </section>
+    </section>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"
+      integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
+      integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/scripts/websocket-service.js"></script>
+    <script src="/scripts/websocket-service.js"></script>
+  </body>
+</html>
