@@ -10,13 +10,16 @@
   },
   "dependencies": {
     "@iconify/vue": "^5.0.0-beta.3",
+    "@stomp/stompjs": "^7.1.1",
     "@tailwindcss/vite": "^4.1.4",
+    "sockjs-client": "^1.6.1",
     "tailwindcss": "^4.1.4",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "@iconify/tailwind4": "^1.0.6",
     "@vitejs/plugin-vue": "^5.2.2",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "vite-plugin-node-polyfills": "^0.23.0"
   }
 }

@@ -1,0 +1,6 @@
+export enum ConnectionStateEnum {
+  CONNECTING = "CONNECTING",
+  CONNECTED = "CONNECTED",
+  DISCONNECTED = "DISCONNECTED",
+  ERROR = "ERROR",
+}

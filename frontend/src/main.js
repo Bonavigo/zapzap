@@ -1,7 +1,7 @@
-import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
 import { Icon } from "@iconify/vue";
+import { createApp } from "vue";
+import App from "./App.vue";
+import "./style.css";
 
 const app = createApp(App);
 
