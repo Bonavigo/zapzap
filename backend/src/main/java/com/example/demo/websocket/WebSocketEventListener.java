@@ -27,11 +27,12 @@ public class WebSocketEventListener {
         // Recupera nome de usuário salvo no headerAccessor
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String username = (String) headerAccessor.getSessionAttributes().get("username");
+        String roomId = (String) headerAccessor.getSessionAttributes().get("roomId");
 
         if(username != null) {
             ChatMessage message = new ChatMessage(MessageType.LEAVE, "Saiu do chat!",  username);
 
-            messageTemplate.convertAndSend("/chat/public",message);
+            messageTemplate.convertAndSend("/chat/"+ roomId, message);
         }
     }
 }

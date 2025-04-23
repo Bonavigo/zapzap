@@ -1,19 +1,26 @@
 <script setup lang="ts">
-defineProps({
-  toggleForm: {
-    type: Function,
-    required: true,
-  },
-});
+import { ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import { authService } from "../../services/auth.service";
+
+const router = useRouter();
+
+const username = ref<string>("");
+
+const register = () => {
+  authService.login(username.value);
+  router.push("chat");
+};
 </script>
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="h-screen flex flex-col items-center justify-center">
     <img
       class="w-[260px] h-auto mb-4"
       src="../../assets/EcoVerde_Preto.png"
       alt="Logo"
     />
     <form
+      @submit.prevent="register"
       class="bg-white p-7 w-full sm:w-100 h-125 rounded-lg shadow-lg flex flex-col gap-4 justify-center"
     >
       <legend class="font-bold text-center text-2xl mb-6">Criar conta</legend>
@@ -24,6 +31,7 @@ defineProps({
           >Nome de usuário:
         </label>
         <input
+          v-model="username"
           type="text"
           name="signup-username"
           id="signup-username"
@@ -70,11 +78,8 @@ defineProps({
 
       <p class="text-center text-sm">
         Já possuí uma conta?
-        <a
-          @click.prevent="toggleForm"
-          class="text-green-500 font-bold hover:text-green-600"
-          href="#"
-          >Entrar</a
+        <RouterLink class="text-green-500 font-bold hover:text-green-600" to="/"
+          >Entrar</RouterLink
         >
       </p>
     </form>

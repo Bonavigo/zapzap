@@ -1,7 +1,8 @@
-import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
+import { Client, StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { reactive, ref } from "vue";
 import { ConnectionStateEnum } from "../enums/connection-state.enum";
+import { IChatMessageResponse } from "../interfaces/chat-message-response.interface";
 import { IChatMessage } from "../interfaces/chat-message.interface";
 
 const WS_URL = "http://localhost:8080/ws";
@@ -12,9 +13,9 @@ class WebsocketService {
   connectionState = ref<ConnectionStateEnum>(ConnectionStateEnum.DISCONNECTED);
   messages = reactive<Map<string, IChatMessage[]>>(new Map());
   activeRoom = ref<string>("general");
-  users = reactive<Set<string>>(new Set());
+  users = reactive<string[]>([]);
 
-  connect(username) {
+  connect(username: string, roomId: string) {
     if (this.client && this.client.connected) {
       return;
     }
@@ -29,45 +30,53 @@ class WebsocketService {
       reconnectDelay: 1000,
     });
 
-    this.client.onConnect = this.onConnect.bind(this);
+    this.client.onConnect = this.onConnect.bind(this, roomId);
     // this.client.onStompError = this.onStompError.bind(this);
     // this.client.onWebSocketClose = this.onWebSocketClose.bind(this);
 
     this.client.activate();
   }
 
-  private onConnect(): void {
+  private onConnect(roomId: string): void {
     if (!this.client) return;
 
     this.connectionState.value = ConnectionStateEnum.CONNECTED;
     console.log("Conectado ao servidor WebSocket");
 
     // Join default room
-    this.joinRoom();
+    this.joinRoom(roomId);
   }
 
   // Subscribe to a chat room
-  public joinRoom(): void {
+  public joinRoom(roomId: string): void {
     if (!this.client || !this.client.connected) {
       console.error("Não foi possível conectar a sala");
       return;
     }
 
-    // if (this.subscriptions.has(roomId)) {
-    //   console.log(`Already subscribed to room: ${roomId}`);
-    //   return;
-    // }
+    if (this.subscriptions.has(roomId)) {
+      console.log(`Já inscrito nesta sala: ${roomId}`);
+      return;
+    }
 
-    // Subscribe to room messages
-    // TODO
+    // Subscribe to chat room
+    const subscription = this.client.subscribe(
+      `/chat/${roomId}`,
+      this.handleMessage.bind(this)
+    );
+    this.subscriptions.set(roomId, subscription);
+    this.activeRoom.value = roomId;
 
-    // Se inscrevendo em tópico publico
-    this.client.subscribe("/chat/public", this.handleMessage.bind(this));
+    // Initialize messages array for this room if needed
+    if (!this.messages.has(roomId)) {
+      this.messages.set(roomId, []);
+    }
 
     // Send join message
     this.sendMessage({
       sender: this.getUsername(),
       content: "Entrou na sala",
+      roomId: roomId,
       type: "JOIN",
     });
 
@@ -86,7 +95,7 @@ class WebsocketService {
       this.sendMessage({
         sender: this.getUsername(),
         content: "Saiu da sala",
-        // room: roomId,
+        roomId: roomId,
         type: "LEAVE",
       });
     }
@@ -100,33 +109,31 @@ class WebsocketService {
     }
 
     this.client.publish({
-      destination: `/app/chat.sendMessage`,
+      destination: `/app/chat/${message.roomId}/sendMessage`,
       body: JSON.stringify(message),
     });
   }
 
-  private handleMessage(message: IMessage): void {
+  private handleMessage(message: IChatMessageResponse): void {
     try {
       console.log("Mensagem recebida:", message.body);
       const chatMessage: IChatMessage = JSON.parse(message.body);
 
-      const TEST_ROOM_ID = "1";
-
       // Add message to room's message list
-      if (!this.messages.has(TEST_ROOM_ID)) {
-        this.messages.set(TEST_ROOM_ID, []);
+      if (!this.messages.has(chatMessage.roomId)) {
+        this.messages.set(chatMessage.roomId, []);
       }
 
-      const roomMessages = this.messages.get(TEST_ROOM_ID);
+      const roomMessages = this.messages.get(chatMessage.roomId);
       if (roomMessages) {
         roomMessages.push(chatMessage);
       }
 
       // Handle user join/leave events
       if (chatMessage.type === "JOIN") {
-        this.users.add(chatMessage.sender);
+        this.users.push(chatMessage.sender);
       } else if (chatMessage.type === "LEAVE") {
-        this.users.delete(chatMessage.sender);
+        this.users = this.users.filter((user) => user !== chatMessage.sender);
       }
     } catch (error) {
       console.error("Erro ao tratar a mensagem:", error);
@@ -139,6 +146,7 @@ class WebsocketService {
     return this.client.connectHeaders.username || "";
   }
 
+  // TODO CHECK IF THIS IS CORRECT
   disconnect(): void {
     this.client?.deactivate();
   }

@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import GroupCard from "@/components/features/ChatDashboard/GroupCard.vue";
-import UserCard from "@/components/features/ChatDashboard/UserCard.vue";
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import GroupCard from "../features/ChatDashboard/GroupCard.vue";
+import UserCard from "../features/ChatDashboard/UserCard.vue";
 
-import { websocketService } from "../../services/websocket.service";
+import { IChatRoom } from "../../interfaces/chat-room.interface";
 
-const isOpen = ref(open);
+const props = defineProps<{
+  users: string[];
+  chatRooms: IChatRoom[];
+}>();
+
+const isOpen = ref<boolean>(true);
 
 const toggleSidebar = () => {
   if (window.innerWidth > 640 && isOpen.value) {
@@ -17,15 +22,10 @@ const toggleSidebar = () => {
 const handleResize = () => {
   const isMobile = window.innerWidth < 640;
 
-  if (!isMobile.value) {
+  if (!isMobile) {
     isOpen.value = true;
   }
 };
-
-// Computed property to get messages for current room
-const currentUsers = computed(() => {
-  return websocketService.users || [];
-});
 
 onMounted(() => {
   handleResize();
@@ -68,7 +68,7 @@ onUnmounted(() => {
     <section class="flex-1 overflow-auto border-b-1 border-gray-700 p-4">
       <h3 class="text-gray-400 mb-4">Usuários na sala</h3>
       <div>
-        <template v-for="user in currentUsers" :key="user">
+        <template v-for="user in props.users" :key="user">
           <UserCard :username="user" />
         </template>
       </div>
@@ -76,7 +76,9 @@ onUnmounted(() => {
     <section class="flex-1 overflow-auto p-4">
       <h3 class="text-gray-400 mb-4">Grupos</h3>
       <div>
-        <GroupCard />
+        <template v-for="chatRoom in props.chatRooms" :key="chatRoom.id">
+          <GroupCard :roomId="chatRoom.id" />
+        </template>
       </div>
     </section>
   </aside>
