@@ -13,10 +13,10 @@ class ApiService {
 
   fetchChatRooms() {
     this.chatRooms = [
-      { id: "Geral" },
-      { id: "Desmatamento" },
-      { id: "Mudanças Climáticas" },
-      { id: "Poluição" },
+      { id: "geral" },
+      { id: "desmatamento" },
+      { id: "mudanças climáticas" },
+      { id: "poluição" },
     ];
   }
 }

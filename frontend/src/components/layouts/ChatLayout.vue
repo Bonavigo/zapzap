@@ -5,6 +5,7 @@ import MessageInput from "../features/ChatDashboard/MessageInput.vue";
 import MessageList from "../features/ChatDashboard/MessageList.vue";
 
 const props = defineProps<{
+  roomId: string;
   username: string;
   messages: IChatMessage[];
 }>();
@@ -20,7 +21,7 @@ const sendMessage = (messageContent: string) => {
 
 <template>
   <section class="w-full h-screen flex flex-col">
-    <ChatHeader />
+    <ChatHeader :roomId="props.roomId" />
     <MessageList :messages="props.messages" :username="props.username" />
     <MessageInput @send="sendMessage" />
   </section>

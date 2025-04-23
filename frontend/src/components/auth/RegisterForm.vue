@@ -9,7 +9,7 @@ const username = ref<string>("");
 
 const register = () => {
   authService.login(username.value);
-  router.push("chat");
+  router.push("/");
 };
 </script>
 <template>
@@ -32,6 +32,7 @@ const register = () => {
         </label>
         <input
           v-model="username"
+          autocomplete="username"
           type="text"
           name="signup-username"
           id="signup-username"
@@ -47,6 +48,7 @@ const register = () => {
           >Senha:
         </label>
         <input
+          autocomplete="new-password"
           type="password"
           name="signup-password"
           id="signup-password"
@@ -62,6 +64,7 @@ const register = () => {
           >Confirmar senha:
         </label>
         <input
+          autocomplete="new-password"
           type="password"
           name="signup-password-confirm"
           id="signup-password-confirm"

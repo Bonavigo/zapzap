@@ -3,7 +3,10 @@ import { onMounted, onUnmounted, ref } from "vue";
 import GroupCard from "../features/ChatDashboard/GroupCard.vue";
 import UserCard from "../features/ChatDashboard/UserCard.vue";
 
+import { useRouter } from "vue-router";
 import { IChatRoom } from "../../interfaces/chat-room.interface";
+
+const router = useRouter();
 
 const props = defineProps<{
   users: string[];
@@ -25,6 +28,11 @@ const handleResize = () => {
   if (!isMobile) {
     isOpen.value = true;
   }
+};
+
+const onSelectChatRoom = (roomId: string) => {
+  router.push(roomId.toLowerCase());
+  isOpen.value = false;
 };
 
 onMounted(() => {
@@ -77,7 +85,7 @@ onUnmounted(() => {
       <h3 class="text-gray-400 mb-4">Grupos</h3>
       <div>
         <template v-for="chatRoom in props.chatRooms" :key="chatRoom.id">
-          <GroupCard :roomId="chatRoom.id" />
+          <GroupCard :roomId="chatRoom.id" @selectChatRoom="onSelectChatRoom" />
         </template>
       </div>
     </section>

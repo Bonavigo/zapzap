@@ -13,7 +13,7 @@ class WebsocketService {
   connectionState = ref<ConnectionStateEnum>(ConnectionStateEnum.DISCONNECTED);
   messages = reactive<Map<string, IChatMessage[]>>(new Map());
   activeRoom = ref<string>("general");
-  users = reactive<string[]>([]);
+  users = reactive<Set<string>>(new Set());
 
   connect(username: string, roomId: string) {
     if (this.client && this.client.connected) {
@@ -55,13 +55,13 @@ class WebsocketService {
     }
 
     if (this.subscriptions.has(roomId)) {
-      console.log(`Já inscrito nesta sala: ${roomId}`);
+      console.log(`Já inscrito nesta sala: ${roomId.toLowerCase()}`);
       return;
     }
 
     // Subscribe to chat room
     const subscription = this.client.subscribe(
-      `/chat/${roomId}`,
+      `/chat/${roomId.toLowerCase()}`,
       this.handleMessage.bind(this)
     );
     this.subscriptions.set(roomId, subscription);
@@ -109,7 +109,7 @@ class WebsocketService {
     }
 
     this.client.publish({
-      destination: `/app/chat/${message.roomId}/sendMessage`,
+      destination: `/app/chat/${message.roomId.toLowerCase()}/sendMessage`,
       body: JSON.stringify(message),
     });
   }
@@ -131,9 +131,9 @@ class WebsocketService {
 
       // Handle user join/leave events
       if (chatMessage.type === "JOIN") {
-        this.users.push(chatMessage.sender);
+        this.users.add(chatMessage.sender);
       } else if (chatMessage.type === "LEAVE") {
-        this.users = this.users.filter((user) => user !== chatMessage.sender);
+        this.users.delete(chatMessage.sender);
       }
     } catch (error) {
       console.error("Erro ao tratar a mensagem:", error);
@@ -146,9 +146,39 @@ class WebsocketService {
     return this.client.connectHeaders.username || "";
   }
 
-  // TODO CHECK IF THIS IS CORRECT
   disconnect(): void {
-    this.client?.deactivate();
+    try {
+      // Unsubscribe from all rooms first
+      this.subscriptions.forEach((subscription, roomId) => {
+        try {
+          subscription.unsubscribe();
+        } catch (error) {
+          console.warn(
+            `Falha ao tentar se desinscrever da sala de bate-papo: ${roomId}:`,
+            error
+          );
+        }
+      });
+
+      // Clear subscriptions map
+      this.subscriptions.clear();
+
+      // Deactivate client
+      if (this.client) {
+        this.client.deactivate();
+        this.client = null; // Remove reference to client
+      }
+
+      // Reset state
+      this.connectionState.value = ConnectionStateEnum.DISCONNECTED;
+      this.users.clear();
+
+      console.log("Desconectado do servidor WebSocket");
+    } catch (error) {
+      console.error("Erro durante a desconexão:", error);
+      // Force connection state to disconnected even if there was an error
+      this.connectionState.value = ConnectionStateEnum.DISCONNECTED;
+    }
   }
 }
 

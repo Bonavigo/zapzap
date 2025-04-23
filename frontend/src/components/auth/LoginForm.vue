@@ -9,7 +9,7 @@ const username = ref<string>("");
 
 const login = () => {
   authService.login(username.value);
-  router.push("chat");
+  router.push("chat/Geral");
 };
 </script>
 

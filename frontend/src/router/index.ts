@@ -17,7 +17,7 @@ const router = createRouter({
       component: RegisterForm,
     },
     {
-      path: "/chat",
+      path: "/chat/:roomId",
       name: "chat",
       component: ChatDashboard,
     },
