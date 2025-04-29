@@ -1,4 +1,4 @@
-package com.example.demo.websocket;
+package com.ecoverdeconnect.demo.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

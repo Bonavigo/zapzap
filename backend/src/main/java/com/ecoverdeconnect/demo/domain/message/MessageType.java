@@ -1,4 +1,4 @@
-package com.example.demo.domain.message;
+package com.ecoverdeconnect.demo.domain.message;
 
 public enum MessageType {
     JOIN,

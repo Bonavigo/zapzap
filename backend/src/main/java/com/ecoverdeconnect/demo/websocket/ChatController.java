@@ -1,6 +1,6 @@
-package com.example.demo.websocket;
+package com.ecoverdeconnect.demo.websocket;
 
-import com.example.demo.domain.message.ChatMessage;
+import com.ecoverdeconnect.demo.domain.message.ChatMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;

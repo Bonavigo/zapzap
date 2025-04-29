@@ -1,13 +1,13 @@
-package com.example.demo;
+package com.ecoverdeconnect.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RealTimeChatWebSocketApplication {
+public class EcoVerdeConnectApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RealTimeChatWebSocketApplication.class, args);
+		SpringApplication.run(EcoVerdeConnectApplication.class, args);
 	}
 
 }

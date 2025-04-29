@@ -1,7 +1,7 @@
-package com.example.demo.websocket;
+package com.ecoverdeconnect.demo.websocket;
 
-import com.example.demo.domain.message.ChatMessage;
-import com.example.demo.domain.message.MessageType;
+import com.ecoverdeconnect.demo.domain.message.MessageType;
+import com.ecoverdeconnect.demo.domain.message.ChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
