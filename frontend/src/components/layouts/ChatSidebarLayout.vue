@@ -81,6 +81,21 @@ onUnmounted(() => {
         </template>
       </div>
     </section>
+    <section class="overflow-auto p-4">
+      <h3 class="text-gray-400 mb-4">Notícias</h3>
+      <div>
+        <div
+          class="group hover:cursor-pointer active:bg-gray-600 hover:bg-gray-700 p-2 rounded-md"
+        >
+          <RouterLink
+            to="/news"
+            class="flex group-hover:text-gray-200 gap-2 items-center text-gray-400"
+            ><Icon icon="ic:baseline-newspaper" class="w-4 h-4" /> Principais
+            notícias</RouterLink
+          >
+        </div>
+      </div>
+    </section>
     <section class="flex-1 overflow-auto p-4">
       <h3 class="text-gray-400 mb-4">Grupos</h3>
       <div>

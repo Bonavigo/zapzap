@@ -16,9 +16,9 @@ const selectChatRoom = () => {
 <template>
   <div
     @click="selectChatRoom"
-    class="flex gap-1 items-center hover:cursor-pointer hover:bg-gray-700 p-2 rounded-md"
+    class="group flex gap-1 items-center hover:cursor-pointer active:bg-gray-600 hover:bg-gray-700 p-2 rounded-md"
   >
     <Icon class="text-gray-400 w-4 h-4" icon="mdi:message-outline" />
-    <p class="text-gray-400">{{ props.roomId }}</p>
+    <p class="group-hover:text-gray-200 text-gray-400">{{ props.roomId }}</p>
   </div>
 </template>

@@ -21,6 +21,11 @@ const router = createRouter({
       name: "chat",
       component: ChatDashboard,
     },
+    {
+      path: "/news",
+      name: "news",
+      component: () => import("../views/NewsView.vue"),
+    },
     // {
     //   path: "/:catchAll(.*)",
     //   name: "not-found",
