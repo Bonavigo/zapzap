@@ -5,7 +5,8 @@ USE ECOVERDECONNECT;
 CREATE TABLE NEWS (
 	id bigint unsigned auto_increment primary key,
     title varchar(255) not null,
-    content longtext not null
+    content longtext not null,
+    links longtext not null
 );
 
 CREATE TABLE USERS (
@@ -14,13 +15,21 @@ CREATE TABLE USERS (
     password varchar(255) not null
 );
 
-insert into news(title, content)
-values('Brasil apresenta plano climático ambicioso para reduzir emissões até 2035',
-'Durante a COP29, o Brasil anunciou seu novo plano climático, comprometendo-se a reduzir entre 59% e 67% das emissões de gases de efeito estufa até 2035, em comparação aos níveis de 2005. O país também apresentou o "Pacto para a Transformação Ecológica", que visa reestruturar a economia nacional com foco em sustentabilidade. Apesar dos avanços, especialistas apontam que os compromissos podem ser insuficientes para limitar o aquecimento global a 1,5°C, especialmente considerando os planos do Brasil de aumentar a produção de combustíveis fósseis.'),
+insert into news(title, content,links)
+values('Brasil é pioneiro na criação de currículo escolar sobre cultura oceânica',
+'A Educação Oceânica no Programa de Estudos Brasileiros Com o suporte da Unesco, o Brasil é o primeiro país a oficializar a incorporação da educação sobre os oceanos no currículo escolar do país. A ação, oficializada com a assinatura de um documento em Brasília, tem como objetivo educar cidadãos sobre a relevância dos oceanos e faz parte dos preparativos para a COP30 em Belém. O "currículo azul", que se adapta às realidades locais, está alinhado com a Década do Oceano da ONU e é resultado da cooperação entre ministérios, instituições de ensino superior e redes de ensino. A ação posiciona o Brasil na linha de frente da educação oceânica mundial, convertendo o saber científico em política pública.',
+'https://jornaldomeioambientesp.org/noticia/Brasil-%C3%A9-pioneiro-na-cria%C3%A7%C3%A3o-de-curr%C3%ADculo-escolar-sobre-cultura-oce%C3%A2nica/2402'),
 
-('Pará estabelece meta de recuperar 140 mil hectares com produção sustentável até 2025',
-'O governo do Pará anunciou, durante a COP28, a meta de recuperar 140 mil hectares de áreas degradadas para produção sustentável até 2025, beneficiando cerca de 4 mil famílias. A iniciativa faz parte da estratégia de agricultura regenerativa do estado, que busca conciliar a preservação da floresta com a produção alimentar. O projeto prevê investimentos de aproximadamente US$ 500 milhões e inclui a implementação da Plataforma Territórios Sustentáveis para regularização ambiental e fundiária.'),
+('Operação Xapiri em Rondônia combate crime de extração ilegal de madeira',
+'Ibama Luta Contra Desmatamento Ilegal em Território Indígena Durante a Operação Xapiri Rondônia, o Ibama, em colaboração com a Polícia Federal e a Funai, desmantelou um esquema de extração ilegal de madeira na Terra Indígena Igarapé Lage (RO). O equipamento empregado, que incluía um trator skidder, foi descartado, resultando em um prejuízo estimado de R$ 200 mil. A intervenção em Nova Mamoré evidencia o aumento da pressão sobre o território indígena, delimitado e habitado por aproximadamente mil indígenas, que enfrenta invasões e loteamentos irregulares. A ação faz parte da estratégia nacional de defesa das Terras Indígenas, com o objetivo de assegurar os direitos dos indígenas e lutar contra o desmatamento, com a expectativa de identificar e penalizar os culpados.',
+'https://jornaldomeioambientesp.org/noticia/Opera%C3%A7%C3%A3o-Xapiri-em-Rond%C3%B4nia-combate-crime-de-extra%C3%A7%C3%A3o-ilegal-de-madeira/2399'),
 
-('Governo Federal lança política inédita para estimular sustentabilidade em portos, aeroportos e hidrovias','Em janeiro de 2025, o Ministério de Portos e Aeroportos lançou uma política pioneira de sustentabilidade voltada para portos, aeroportos e hidrovias. A iniciativa visa incentivar práticas sustentáveis, promover a transparência e fortalecer a inclusão social no setor. Empresas que adotarem práticas ambientais, sociais e de governança receberão um selo de reconhecimento, estimulando a adoção de medidas sustentáveis em suas operações.'),
+('Setor da construção baixa emissões de CO2 pela primeira vez, diz Pnuma',
+'Um documento conjunto do Pnuma e da GlobalABC (Relatório de Status Global 2024-2025) mostra uma diminuição inédita nas emissões de CO2 no setor da construção em 2023, impulsionada pela diminuição do consumo energético e maior utilização de energias renováveis. Embora tenha havido progresso, o setor continua sendo um dos principais contribuintes para a crise climática. O documento solicita maior empenho em seis setores vitais, como a implementação de códigos de construção com zero carbono por grandes emissores até 2028 e em escala global até 2035, além da incorporação de planos de reforma nas NDCs. A ONU destaca a necessidade premente de atualizar os códigos de energia e ampliar o financiamento para atingir os objetivos climáticos, uma vez que as construções representam um terço das emissões e resíduos globais.',
+'https://jornaldomeioambientesp.org/noticia/Setor-da-constru%C3%A7%C3%A3o-baixa-emiss%C3%B5es-de-CO2-pela-primeira-vez--diz-Pnuma/2393'),
 
-('Fundação Príncipe Albert II de Mônaco inicia operações no Brasil para proteção da biodiversidade', 'A Fundação Príncipe Albert II de Mônaco iniciou formalmente suas operações no Brasil em 2024, com foco na proteção da biodiversidade e do meio ambiente. A instituição financiará programas de prevenção de incêndios florestais em territórios indígenas, proteção da biodiversidade na região do Alto Juruá, na Floresta Amazônica, e concederá bolsas de doutorado na USP em áreas relacionadas à sustentabilidade. O príncipe Charles-Philippe de Orléans, vice-presidente-executivo da filial da América Latina, visitou São Paulo para promover os projetos e destacou o potencial do Brasil em liderar a preservação ambiental global.');
+('Conferência debate impactos perigosos da poluição do ar na saúde e na economia BR',
+'A Fundação Príncipe Albert II de Mônaco iniciou formalmente suas operações no Brasil em 2024, com foco na proteção da biodiversidade e do meio ambiente. A instituição financiará programas de prevenção de incêndios florestais em territórios indígenas, proteção da biodiversidade na região do Alto Juruá, na Floresta Amazônica, e concederá bolsas de doutorado na USP em áreas relacionadas à sustentabilidade. O príncipe Charles-Philippe de Orléans, vice-presidente-executivo da filial da América Latina, visitou São Paulo para promover os projetos e destacou o potencial do Brasil em liderar a preservação ambiental global.',
+'https://jornaldomeioambientesp.org/noticia/Confer%C3%AAncia-debate-impactos-perigosos-da-polui%C3%A7%C3%A3o-do-ar-na-sa%C3%BAde-e-na-economia-BR/2394');
+
+select * from news;
