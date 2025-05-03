@@ -1,7 +1,11 @@
 package com.ecoverdeconnect.demo.entities;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "news")
@@ -16,13 +20,16 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    private String links;
+
     public News() {
     }
 
-    public News(Long id, String title, String content) {
+    public News(Long id, String title, String content, String links) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.links = links;
     }
 
     public Long getId() {
@@ -47,5 +54,13 @@ public class News {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getLinks() {
+        return links;
+    }
+
+    public void setLinks(String links) {
+        this.links = links;
     }
 }
