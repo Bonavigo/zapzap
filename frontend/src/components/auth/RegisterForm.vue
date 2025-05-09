@@ -6,10 +6,50 @@ import { authService } from "../../services/auth.service";
 const router = useRouter();
 
 const username = ref<string>("");
+const password = ref<string>("");
+const passwordConfirm = ref<string>("");
+const registrationError = ref<string | null>(null);
+const registrationSuccess = ref<boolean>(false);
+const registrationMessage = ref<string | null>(null);
 
-const register = () => {
-  authService.login(username.value);
-  router.push("/");
+const register = async () => {
+  registrationError.value = null;
+  registrationSuccess.value = false;
+  registrationMessage.value = null;
+
+  if (password.value !== passwordConfirm.value) {
+    registrationError.value = "As senhas não coincidem.";
+    return;
+  }
+
+  try {
+    // 1. Verificar se o nome de usuário já existe
+    const userExists = await authService.checkUsernameExists(username.value);
+
+    if (userExists) {
+      registrationError.value = "Este nome de usuário já está em uso.";
+      return;
+    }
+
+    // 2. Se o nome de usuário não existe, prosseguir com o registro
+    const response = await authService.register({
+      username: username.value,
+      password: password.value,
+    });
+
+    if (response) {
+      registrationSuccess.value = true;
+      registrationMessage.value = response;
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    } else {
+      registrationError.value = "Erro ao registrar o usuário.";
+    }
+  } catch (error: any) {
+    console.error("Erro durante o registro:", error);
+    registrationError.value = error.message || "Erro ao conectar com o servidor.";
+  }
 };
 </script>
 <template>
@@ -40,6 +80,7 @@ const register = () => {
           placeholder="Digite seu nome de usuário"
           required
         />
+    <p v-if="registrationError" class="text-red-500 text-sm mt-1">{{ registrationError }}</p>
       </div>
       <div class="flex flex-col">
         <label
@@ -48,6 +89,7 @@ const register = () => {
           >Senha:
         </label>
         <input
+          v-model="password"
           autocomplete="new-password"
           type="password"
           name="signup-password"
@@ -64,19 +106,20 @@ const register = () => {
           >Confirmar senha:
         </label>
         <input
+          v-model="passwordConfirm"
           autocomplete="new-password"
           type="password"
           name="signup-password-confirm"
           id="signup-password-confirm"
           class="invalid:outline-red-400 border-2 text-sm border-gray-300 rounded-md p-2 outline-green-500"
-          placeholder="Digite sua senha"
+          placeholder="Confirme sua senha"
           required
-        />
+          />
       </div>
       <button
         class="bg-gray-900 text-sm text-white py-1.5 hover:cursor-pointer hover:opacity-90 rounded-sm"
       >
-        Entrar
+        Criar conta
       </button>
 
       <p class="text-center text-sm">

@@ -6,10 +6,28 @@ import { authService } from "../../services/auth.service";
 const router = useRouter();
 
 const username = ref<string>("");
+const password = ref<string>("");
+const loginError = ref<string | null>(null);
 
-const login = () => {
-  authService.login(username.value);
-  router.push("chat/Geral");
+const loginUser = async () => {
+  loginError.value = null;
+
+  try {
+    const response = await authService.login({
+      username: username.value,
+      password: password.value,
+    });
+
+    if (response?.success) {
+      // Login bem-sucedido, o authService já armazenou o usuário e pode ter redirecionado
+      router.push("chat/Geral");
+    } else {
+      loginError.value = response?.message || "Erro ao tentar fazer login.";
+    }
+  } catch (error: any) {
+    console.error("Erro durante o login:", error);
+    loginError.value = error.message || "Erro ao conectar com o servidor.";
+  }
 };
 </script>
 
@@ -21,7 +39,7 @@ const login = () => {
       alt="Logo"
     />
     <form
-      @submit.prevent="login"
+      @submit.prevent="loginUser"
       class="bg-white p-7 w-full sm:w-100 h-125 rounded-lg shadow-lg flex flex-col gap-4 justify-center"
     >
       <legend class="font-bold text-center text-2xl mb-6">
@@ -47,6 +65,7 @@ const login = () => {
           >Senha:
         </label>
         <input
+          v-model="password"
           autocomplete="current-password"
           type="password"
           name="login-password"
@@ -56,6 +75,7 @@ const login = () => {
           required
         />
       </div>
+       <p v-if="loginError" class="text-red-500 text-sm mt-1 text-center">{{ loginError }}</p>
       <button
         class="bg-gray-900 text-sm text-white py-1.5 hover:cursor-pointer hover:opacity-90 rounded-sm"
       >

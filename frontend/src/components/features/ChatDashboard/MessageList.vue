@@ -10,21 +10,21 @@ defineProps<{
 </script>
 
 <template>
-  <dl
-    class="relative bg-gray-900 flex-1 overflow-auto p-4 flex flex-col items-center gap-4"
-  >
-    <img
-      class="opacity-50 pointer-events-none max-w-100 sticky top-1/2 -translate-y-1/2"
-      src="../../../assets/EcoVerde_Preto.png"
-      alt="Logo"
-    />
-    <template v-for="(msg, index) in messages" :key="index">
-      <SelfMessage
-        v-if="msg.sender === username"
-        :sender="msg.sender"
-        :content="msg.content"
+   <dl class="relative bg-gray-900 flex-1 overflow-auto p-4 flex flex-col items-center gap-4">
+    <div class="absolute inset-0 z-0">
+      <img
+        class="w-full h-full object-fill opacity-50"
+        src="../../../assets/Fundo_Chat.png"
+        alt="Logo"
       />
-      <OtherMessage v-else :sender="msg.sender" :content="msg.content" />
-    </template>
+    </div>
+      <template v-for="(msg, index) in messages" :key="index">
+        <SelfMessage
+          v-if="msg.sender === username"
+          :sender="msg.sender"
+          :content="msg.content"
+        />
+        <OtherMessage v-else :sender="msg.sender" :content="msg.content" />
+      </template>
   </dl>
 </template>

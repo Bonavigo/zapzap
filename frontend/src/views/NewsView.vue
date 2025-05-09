@@ -36,7 +36,7 @@ onMounted(async () => {
               <p>{{ news.content }}</p>
             </div>
             <div class="hidden-content">
-              <p>{{news.description}}</p>
+              <p>{{ news.description }}</p>
               <a :href="news.links" target="_blank" class="read-more">Ver notícia completa</a>
             </div>
           </div>
