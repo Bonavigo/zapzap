@@ -1,11 +1,12 @@
 package com.ecoverdeconnect.demo.domain.message;
 
 
+import java.util.List;
 
 public class ChatMessage {
 
     private MessageType type;
-    private String content;
+    private Object content;
     private String sender;
     private String roomId;
 
@@ -26,11 +27,11 @@ public class ChatMessage {
         this.type = type;
     }
 
-    public String getContent() {
+    public Object getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Object content) {
         this.content = content;
     }
 

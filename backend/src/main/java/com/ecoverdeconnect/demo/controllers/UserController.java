@@ -33,12 +33,6 @@ public class UserController {
     public  ResponseEntity<String> login(@RequestBody User user) {
         boolean success = userService.authenticateUser(user.getUsername(), user.getPassword());
         return success ? ResponseEntity.status(HttpStatus.OK).body("Login bem-sucedido!") : // Alterei para HttpStatus.OK
-                       ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas!"); // Alterei para HttpStatus.UNAUTHORIZED
-    }
-
-    @GetMapping("/check")
-    public ResponseEntity<Boolean> checkUsernameExists(@RequestParam String username) {
-        boolean exists = userService.existsByUsername(username);
-        return ResponseEntity.ok(exists);
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas!"); // Alterei para HttpStatus.UNAUTHORIZED
     }
 }

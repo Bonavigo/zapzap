@@ -28,8 +28,4 @@ public class UserService {
         User existingUser = userRepository.findByUsername(username);
         return existingUser != null && existingUser.getPassword().equals(password);
     }
-
-    public boolean existsByUsername(String username) {
-        return userRepository.findByUsername(username) != null;
-    }
 }

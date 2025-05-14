@@ -32,7 +32,7 @@ public class WebSocketEventListener {
         if(username != null) {
             ChatMessage message = new ChatMessage(MessageType.LEAVE, "Saiu do chat!",  username);
 
-            messageTemplate.convertAndSend("/chat/"+ roomId, message);
+            messageTemplate.convertAndSend("/chat/"+ roomId + "/removeUser", message);
         }
     }
 }
