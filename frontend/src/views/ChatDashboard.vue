@@ -74,7 +74,7 @@ watch(websocketService.connectionState, (newState, oldState) => {
 
 watch(roomId, (newRoomId) => {
   if (websocketService.activeRoom.value !== newRoomId) {
-    websocketService.leaveRoom(websocketService.activeRoom.value);
+    websocketService.leaveRoom(websocketService.activeRoom.value.toLowerCase());
     websocketService.joinRoom(newRoomId);
     websocketService.activeRoom.value = newRoomId;
     websocketService.messages.set(newRoomId, []);

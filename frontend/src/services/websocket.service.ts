@@ -101,6 +101,8 @@ class WebsocketService {
     this.client.publish({
       destination: `/app/chat/${roomId.toLowerCase()}/addUser`,
       body: JSON.stringify({
+        type: "JOIN",
+        content: "Entrou na sala",
         sender: this.username!,
         roomId: roomId,
       }),
@@ -124,11 +126,14 @@ class WebsocketService {
       this.subscriptions.delete(roomId);
 
       // Send leave message
-      this.sendMessage({
-        sender: this.username!,
-        content: "Saiu da sala",
-        roomId: roomId,
-        type: "LEAVE",
+      this.client!.publish({
+        destination: `/app/chat/${roomId.toLowerCase()}/removeUser`,
+        body: JSON.stringify({
+          type: "LEAVE",
+          content: "Saiu da sala",
+          sender: this.username!,
+          roomId: roomId,
+        }),
       });
     }
   }
@@ -181,6 +186,10 @@ class WebsocketService {
     try {
       console.log("Lista de usuários recebida:", userList);
       this.users.clear();
+      if (userList.length === 0) {
+        this.users.add(this.username!);
+        return;
+      }
       userList.forEach((username) => this.users.add(username));
     } catch (error) {
       console.error("Erro ao tratar a lista de usuários:", error);
