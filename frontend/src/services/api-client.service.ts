@@ -15,6 +15,7 @@ class ApiClientService {
 
   setBaseURL(url: string) {
     this.baseURL = url;
+    this.axiosInstance.defaults.baseURL = url;
   }
 
   constructor() {

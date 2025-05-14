@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
+import { apiClientService } from "../../services/api-client.service";
 import { authService } from "../../services/auth.service";
 
 const router = useRouter();
 
 const username = ref<string>("");
 const password = ref<string>("");
+const serverIp = ref<string>("");
 const loginError = ref<string | null>(null);
 
 const loginUser = async () => {
   loginError.value = null;
+
+  if (serverIp.value) {
+    apiClientService.setBaseURL(serverIp.value);
+  }
 
   const status = await authService.login({
     username: username.value,
@@ -41,6 +47,19 @@ const loginUser = async () => {
         Entrar em sua conta
       </legend>
       <div class="flex flex-col">
+        <label for="server-ip" class="text-gray-800 text-sm font-bold mb-1"
+          >IP do servidor:
+        </label>
+        <input
+          v-model="serverIp"
+          type="text"
+          name="server-ip"
+          id="server-ip"
+          class="invalid:outline-red-400 border-2 text-sm border-gray-300 rounded-md p-2 outline-green-500"
+          placeholder="http://xxx.xxx.xx.xx:xxxx. Opcional!"
+        />
+      </div>
+      <div class="flex flex-col">
         <label for="login-username" class="text-gray-800 text-sm font-bold mb-1"
           >Nome de usuário:
         </label>
@@ -55,6 +74,7 @@ const loginUser = async () => {
           required
         />
       </div>
+
       <div class="flex flex-col">
         <label for="login-password" class="text-gray-800 text-sm font-bold mb-1"
           >Senha:

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
+import { apiClientService } from "../../services/api-client.service";
 import { authService } from "../../services/auth.service";
 
 const router = useRouter();
 
 const username = ref<string>("");
 const password = ref<string>("");
+const serverIp = ref<string>("");
 const passwordConfirm = ref<string>("");
 const registrationError = ref<string | null>(null);
 
@@ -14,6 +16,10 @@ const register = async () => {
   if (password.value !== passwordConfirm.value) {
     registrationError.value = "As senhas não coincidem.";
     return;
+  }
+
+  if (serverIp.value) {
+    apiClientService.setBaseURL(serverIp.value);
   }
 
   const status = await authService.register({
@@ -45,6 +51,19 @@ const register = async () => {
     >
       <legend class="font-bold text-center text-2xl mb-6">Criar conta</legend>
       <div class="flex flex-col">
+        <div class="flex flex-col mb-2">
+          <label for="server-ip" class="text-gray-800 text-sm font-bold mb-1"
+            >IP do servidor:
+          </label>
+          <input
+            v-model="serverIp"
+            type="text"
+            name="server-ip"
+            id="server-ip"
+            class="invalid:outline-red-400 border-2 text-sm border-gray-300 rounded-md p-2 outline-green-500"
+            placeholder="http://xxx.xxx.xx.xx:xxxx. Opcional!"
+          />
+        </div>
         <label
           for="signup-username"
           class="text-gray-800 text-sm font-bold mb-1"

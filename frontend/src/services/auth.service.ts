@@ -45,7 +45,7 @@ class AuthService {
     } catch (error: any) {
       return {
         success: false,
-        message: error.message || "Falha ao tentar fazer login.",
+        message: error.response?.data || "Falha ao tentar fazer login.",
       };
     }
   }
@@ -64,7 +64,7 @@ class AuthService {
     } catch (error: any) {
       return {
         success: false,
-        message: error.response.data,
+        message: error.response?.data || "Falha ao tentar fazer registro.",
       };
     }
   }
