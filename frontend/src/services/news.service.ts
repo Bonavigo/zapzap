@@ -1,10 +1,14 @@
-const API_URL = "http://localhost:8080";
+import { INews } from "../interfaces/news.interface";
+import { apiClientService } from "./api-client.service";
 
 class NewsService {
-  async getAllNews(): Promise<any> {
-    const response = await fetch(`${API_URL}/news`);
-
-    return response.json();
+  async getAllNews(): Promise<INews[]> {
+    try {
+      return await apiClientService.get<INews[]>("/news");
+    } catch (error) {
+      console.error("Erro ao buscar por notícias:", error);
+      return [];
+    }
   }
 }
 

@@ -4,35 +4,50 @@ import { reactive, ref } from "vue";
 import { ConnectionStateEnum } from "../enums/connection-state.enum";
 import { IChatMessageResponse } from "../interfaces/chat-message-response.interface";
 import { IChatMessage } from "../interfaces/chat-message.interface";
-
-const WS_URL = "http://localhost:8080/ws";
+import router from "../router";
+import { apiClientService } from "./api-client.service";
+import { authService } from "./auth.service";
 
 class WebsocketService {
   private client: Client | null = null;
   private subscriptions: Map<string, StompSubscription> = new Map();
   connectionState = ref<ConnectionStateEnum>(ConnectionStateEnum.DISCONNECTED);
   messages = reactive<Map<string, IChatMessage[]>>(new Map());
-  activeRoom = ref<string>("general");
+  activeRoom = ref<string>("geral");
   users = reactive<Set<string>>(new Set());
 
-  connect(username: string, roomId: string) {
+  get wsUrl(): string {
+    const baseUrl = apiClientService.getBaseURL();
+    return `${baseUrl}/ws`;
+  }
+
+  get username(): string | null {
+    return authService.getUser()?.username || null;
+  }
+
+  connect(roomId: string) {
     if (this.client && this.client.connected) {
       return;
     }
 
     this.connectionState.value = ConnectionStateEnum.CONNECTING;
 
+    const clientUsername = this.username;
+
+    if (!clientUsername) {
+      router.push("/");
+      return;
+    }
+
     this.client = new Client({
-      webSocketFactory: () => new SockJS(WS_URL),
+      webSocketFactory: () => new SockJS(this.wsUrl),
       connectHeaders: {
-        username,
+        username: clientUsername,
       },
       reconnectDelay: 1000,
     });
 
     this.client.onConnect = this.onConnect.bind(this, roomId);
-    // this.client.onStompError = this.onStompError.bind(this);
-    // this.client.onWebSocketClose = this.onWebSocketClose.bind(this);
 
     this.client.activate();
   }
@@ -59,7 +74,7 @@ class WebsocketService {
       return;
     }
 
-    // Subscribe to chat room
+    // 1. Subscribe to chat-room
     const subscription = this.client.subscribe(
       `/chat/${roomId.toLowerCase()}`,
       this.handleMessage.bind(this)
@@ -67,21 +82,38 @@ class WebsocketService {
     this.subscriptions.set(roomId, subscription);
     this.activeRoom.value = roomId;
 
+    // 2. Subscribe to user-specific messages
+    const userSubscription = this.client.subscribe(
+      `/user/${this.username}/queue/chat/${roomId.toLowerCase()}`,
+      (message) => {
+        console.log("PRIVATE MESSAGE RECEIVED:", message);
+        this.handleMessage(message);
+      }
+    );
+    this.subscriptions.set(`${roomId}_user`, userSubscription);
+
     // Initialize messages array for this room if needed
     if (!this.messages.has(roomId)) {
       this.messages.set(roomId, []);
     }
 
     // Send join message
-    this.sendMessage({
-      sender: this.getUsername(),
-      content: "Entrou na sala",
-      roomId: roomId,
-      type: "JOIN",
+    this.client.publish({
+      destination: `/app/chat/${roomId.toLowerCase()}/addUser`,
+      body: JSON.stringify({
+        sender: this.username!,
+        roomId: roomId,
+      }),
     });
 
     // Get users in room
-    // TODO
+    this.client.publish({
+      destination: `/app/chat/${roomId.toLowerCase()}/getUsers`,
+      body: JSON.stringify({
+        sender: this.username!,
+        roomId: roomId,
+      }),
+    });
   }
 
   // Leave a chat room
@@ -93,7 +125,7 @@ class WebsocketService {
 
       // Send leave message
       this.sendMessage({
-        sender: this.getUsername(),
+        sender: this.username!,
         content: "Saiu da sala",
         roomId: roomId,
         type: "LEAVE",
@@ -119,6 +151,11 @@ class WebsocketService {
       console.log("Mensagem recebida:", message.body);
       const chatMessage: IChatMessage = JSON.parse(message.body);
 
+      // Check if is user list message and set to the correct handler
+      if (chatMessage.type === "USER_LIST") {
+        return this.handleUserList(chatMessage.content as string[]);
+      }
+
       // Add message to room's message list
       if (!this.messages.has(chatMessage.roomId)) {
         this.messages.set(chatMessage.roomId, []);
@@ -140,10 +177,14 @@ class WebsocketService {
     }
   }
 
-  // Get current username from client
-  private getUsername(): string {
-    if (!this.client || !this.client.connected) return "";
-    return this.client.connectHeaders.username || "";
+  private handleUserList(userList: string[]): void {
+    try {
+      console.log("Lista de usuários recebida:", userList);
+      this.users.clear();
+      userList.forEach((username) => this.users.add(username));
+    } catch (error) {
+      console.error("Erro ao tratar a lista de usuários:", error);
+    }
   }
 
   disconnect(): void {

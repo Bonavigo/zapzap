@@ -5,7 +5,7 @@ import ChatSidebarLayout from "../components/layouts/ChatSidebarLayout.vue";
 
 import { useRoute } from "vue-router";
 import { ConnectionStateEnum } from "../enums/connection-state.enum";
-import { apiService } from "../services/api.service";
+import { apiClientService } from "../services/api-client.service";
 import { authService } from "../services/auth.service";
 import { websocketService } from "../services/websocket.service";
 
@@ -17,15 +17,15 @@ const roomId = computed(() => {
 });
 
 const username = computed(() => {
-  return authService.getUser() || "Anônimo";
+  return authService.getUser()?.username || "Anônimo";
 });
 
 const currentUsers = computed(() => {
-  return Array.from(websocketService.users) || new Set();
+  return Array.from(websocketService.users);
 });
 
 const currentChatRooms = computed(() => {
-  return Array.from(apiService.chatRooms) || new Set();
+  return Array.from(apiClientService.chatRooms) || new Set();
 });
 
 const currentMessages = computed(() => {
@@ -46,11 +46,11 @@ onMounted(() => {
     websocketService.connectionState?.value !== ConnectionStateEnum.CONNECTED
   ) {
     // Dinamyc set the chat room from url
-    const isValidRoomId = apiService.chatRooms.some(
+    const isValidRoomId = apiClientService.chatRooms.some(
       (room) => room.id.toLowerCase() === roomId.value.toLowerCase()
     );
     if (isValidRoomId) {
-      websocketService.connect(username.value, roomId.value.toLowerCase());
+      websocketService.connect(roomId.value.toLowerCase());
       return;
     }
     window.alert(
@@ -67,7 +67,7 @@ watch(websocketService.connectionState, (newState, oldState) => {
   ) {
     // Attempt to reconnect if unexpectedly disconnected
     setTimeout(() => {
-      websocketService.connect(username.value, roomId.value.toLowerCase());
+      websocketService.connect(roomId.value.toLowerCase());
     }, 2000);
   }
 });
